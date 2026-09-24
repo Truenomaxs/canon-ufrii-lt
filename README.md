@@ -5,12 +5,11 @@ patched to run outside FHS via patchelf + libredirect — no sandbox
 escape, no vendored proprietary binary in this repo (fetched from
 Canon's own servers at build time).
 
+
 ## Tested on
 
-- NixOS 25.05 (unstable), Canon LBP6030 over USB
-
-  <!-- update as you confirm more; this tells readers exactly how far
-       to trust it before trying their own hardware -->
+- NixOS 26.11 (Zokor), Canon LBP6030 over USB
+- nixpkgs: `nixos-unstable`
 
 ## Installation
 
