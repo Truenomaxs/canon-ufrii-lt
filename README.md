@@ -16,7 +16,7 @@ Canon's own servers at build time).
 Add to your `flake.nix`:
 
     {
-      inputs.canon-ufrii-lt.url = "github:yourname/canon-ufrii-lt";
+      inputs.canon-ufrii-lt.url = "github:Truenomaxs/canon-ufrii-lt";
 
       outputs = { self, nixpkgs, canon-ufrii-lt, ... }: {
         nixosConfigurations.yourhost = nixpkgs.lib.nixosSystem {
