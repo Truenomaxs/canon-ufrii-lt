@@ -86,6 +86,8 @@ and leaves your system's unfree policy alone.
 
 ## Usage
 
+Add to your `configuration.nix`:
+
     services.canon-ufrii-lt.enable = true;  # driver + the required runtime quirk
     services.printing.enable = true;
 
