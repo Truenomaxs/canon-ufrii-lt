@@ -48,26 +48,34 @@ registered.
 
 Add to your `flake.nix`:
 
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    canon-ufrii-lt.url = "github:Truenomaxs/canon-ufrii-lt";
+  };
+
+  outputs =
     {
-      inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+      self,
+      nixpkgs,
+      canon-ufrii-lt,
+      ...
+    }:
+    
+    {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
 
-        canon-ufrii-lt.url =
-          "github:Truenomaxs/canon-ufrii-lt";
+        modules = [
+          canon-ufrii-lt.nixosModules.default
+          ./configuration.nix
+        ];
       };
-
-      outputs = { self, nixpkgs, canon-ufrii-lt, ... }: {
-        nixosConfigurations.yourhost =
-          nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-
-            modules = [
-              canon-ufrii-lt.nixosModules.default
-              ./configuration.nix
-            ];
-          };
-      };
-    }
+    };
+}
 
 The Canon driver is unfree (see [License](#license)), so your own
 `nixpkgs.config` needs to allow it before `services.canon-ufrii-lt`
@@ -98,7 +106,7 @@ Add to your `configuration.nix`:
           deviceUri = "usb://Canon/LBP6030/6040/6018L?serial=0000A1O5T05I";
           model = "CNRCUPSLBP6030ZNS.ppd";
           description = "Canon LBP6030";
-          # location = "...";
+          location = "USB";
         }
       ];
       ensureDefaultPrinter = "Canon_LBP6030";
