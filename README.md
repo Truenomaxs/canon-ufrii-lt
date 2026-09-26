@@ -44,10 +44,12 @@ into your own config), you need to replicate that bind mount yourself
 builds of the driver and a mount that doesn't match what's actually
 registered.
 
+
 ## Installation
 
 Add to your `flake.nix`:
 
+```nix
 {
   description = "NixOS configuration";
 
@@ -64,7 +66,6 @@ Add to your `flake.nix`:
       canon-ufrii-lt,
       ...
     }:
-    
     {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -76,21 +77,31 @@ Add to your `flake.nix`:
       };
     };
 }
+```
 
 The Canon driver is unfree (see [License](#license)), so your own
 `nixpkgs.config` needs to allow it before `services.canon-ufrii-lt`
-will evaluate. Either allow it specifically:
+will evaluate. Add one of the following to your `configuration.nix`
+(this is a NixOS module option, not something set in `flake.nix`
+itself).
 
-    nixpkgs.config.allowUnfreePredicate =
-      pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "canon-ufrii-lt" ];
+Either allow it specifically:
+
+```nix
+nixpkgs.config.allowUnfreePredicate =
+  pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "canon-ufrii-lt" ];
+```
 
 or allow unfree packages generally, if that's already your policy:
 
-    nixpkgs.config.allowUnfree = true;
+```nix
+nixpkgs.config.allowUnfree = true;
+```
 
 This module deliberately doesn't set either of these for you — it only
 builds itself unfree-safe for its own `nix build` / `nix flake check`,
 and leaves your system's unfree policy alone.
+
 
 ## Usage
 
@@ -130,7 +141,7 @@ Everything else — printer definitions, `default`, `logLevel`,
 manual for those.
 
 ## Finding your deviceUri and model
-
+ 
     lsusb                     # confirm the printer is detected
     lpinfo -v                 # find the usb:// device URI
     ls <driver-store-path>/share/ppd  # find your model's .ppd filename
