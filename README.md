@@ -44,7 +44,6 @@ into your own config), you need to replicate that bind mount yourself
 builds of the driver and a mount that doesn't match what's actually
 registered.
 
-
 ## Installation
 
 Add to your `flake.nix`:
@@ -102,26 +101,27 @@ This module deliberately doesn't set either of these for you — it only
 builds itself unfree-safe for its own `nix build` / `nix flake check`,
 and leaves your system's unfree policy alone.
 
-
 ## Usage
 
 Add to your `configuration.nix`:
 
-    services.canon-ufrii-lt.enable = true;  # driver + the required runtime quirk
-    services.printing.enable = true;
+```nix
+services.canon-ufrii-lt.enable = true;  # driver + the required runtime quirk
+services.printing.enable = true;
 
-    hardware.printers = {
-      ensurePrinters = [
-        {
-          name = "Canon_LBP6030";
-          deviceUri = "usb://Canon/LBP6030/6040/6018L?serial=0000A1O5T05I";
-          model = "CNRCUPSLBP6030ZNS.ppd";
-          description = "Canon LBP6030";
-          location = "USB";
-        }
-      ];
-      ensureDefaultPrinter = "Canon_LBP6030";
-    };
+hardware.printers = {
+  ensurePrinters = [
+    {
+      name = "Canon_LBP6030";
+      deviceUri = "usb://Canon/LBP6030/6040/6018L?serial=0000A1O5T05I";
+      model = "CNRCUPSLBP6030ZNS.ppd";
+      description = "Canon LBP6030";
+      location = "USB";
+    }
+  ];
+  ensureDefaultPrinter = "Canon_LBP6030";
+};
+```
 
 `services.canon-ufrii-lt.enable = true` adds the driver and its one
 required runtime quirk (see below). Printers, defaults, log level, and
@@ -131,9 +131,9 @@ separate option surface to learn on top of `hardware.printers` /
 
 ## Options reference
 
-| Option                              | Type    | Default   | Description                                   |
-|--------------------------------------|---------|-----------|-------------------------------------------------|
-| `services.canon-ufrii-lt.enable`     | bool    | `false`   | Add the driver and its required runtime quirk   |
+| Option                            | Type   | Default | Description                                    |
+| ---------------------------------- | ------ | ------- | ----------------------------------------------- |
+| `services.canon-ufrii-lt.enable`   | bool   | `false` | Add the driver and its required runtime quirk   |
 
 Everything else — printer definitions, `default`, `logLevel`,
 `ipp-usb` — lives on the standard `hardware.printers` and
@@ -141,10 +141,12 @@ Everything else — printer definitions, `default`, `logLevel`,
 manual for those.
 
 ## Finding your deviceUri and model
- 
-    lsusb                     # confirm the printer is detected
-    lpinfo -v                 # find the usb:// device URI
-    ls <driver-store-path>/share/ppd  # find your model's .ppd filename
+
+```bash
+lsusb                              # confirm the printer is detected
+lpinfo -v                          # find the usb:// device URI
+ls <driver-store-path>/share/ppd   # find your model's .ppd filename
+```
 
 ## Why the system quirk in module.nix?
 
