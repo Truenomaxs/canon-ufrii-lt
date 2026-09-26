@@ -7,16 +7,40 @@ Canon's own servers at build time).
 
 ## Tested on
 
-- NixOS 26.11 (Zokor), Canon LBP6030 over USB
+- NixOS 26.11 (Zokor), Canon LBP6030w over USB
 - nixpkgs: `nixos-unstable`
 
-> This module wraps Canon's generic UFRII LT driver package, so it may
-> work as-is for other printers in the UFRII LT family beyond the
-> LBP6030 (just point `hardware.printers.ensurePrinters.<name>.model`
-> at the matching `.ppd` shipped in the driver). This is currently
-> **untested** — if you try it on a different UFRII LT model and it
-> works (or doesn't), please open an issue so it can be added to the
-> compatibility list.
+## Likely compatible
+
+This module packages Canon's UFRII LT driver directly, so it should
+work as-is for any printer in that driver family — just point
+`hardware.printers.ensurePrinters.<name>.model` at the matching
+`.ppd` shipped in the driver and adjust `deviceUri` for your device.
+Per Canon's own supported-models list for the UFRII LT (not UFR II)
+driver:
+
+- imageCLASS LBP112
+- imageCLASS LBP113w
+- imageCLASS LBP151dw
+- imageCLASS LBP6030 / LBP6030B / LBP6030w
+- imageCLASS LBP6230dn
+- imageCLASS LBP7100Cn
+- imageCLASS LBP7110Cw
+- imageCLASS LBP8100n
+- imageCLASS MF912 / MF913w
+
+> **Only the LBP6030 has actually been tested and confirmed printing.**
+> Everything else on this list is untested — it's included because
+> Canon's own driver documentation lists it as using the same UFRII LT
+> driver package, not because anyone has verified it. If you try this
+> module on any of these (or another UFRII LT printer not listed
+> here) and it works — or doesn't — please open an issue so the list
+> above can reflect what's actually confirmed.
+
+Note this is specifically the **UFRII LT** driver family, not the
+separate (and much larger) **UFR II** driver family Canon bundles
+office/imageRUNNER-class printers under — those use a different print
+language and this module won't help with them.
 
 ## Layout
 
@@ -112,14 +136,14 @@ services.printing.enable = true;
 hardware.printers = {
   ensurePrinters = [
     {
-      name = "Canon_LBP6030";
+      name = "Canon_LBP6030w";
       deviceUri = "usb://Canon/LBP6030/6040/6018L?serial=0000A1O5T05I";
       model = "CNRCUPSLBP6030ZNS.ppd";
-      description = "Canon LBP6030";
+      description = "Canon LBP6030w";
       location = "USB";
     }
   ];
-  ensureDefaultPrinter = "Canon_LBP6030";
+  ensureDefaultPrinter = "Canon_LBP6030w";
 };
 ```
 
